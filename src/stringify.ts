@@ -1,4 +1,4 @@
-const stringify = (value: unknown): string => {
+export const stringify = (value: unknown): string => {
   // arrays
   if (Array.isArray(value)) {
     return `[${value.map(stringify).join()}]`
@@ -13,4 +13,10 @@ const stringify = (value: unknown): string => {
   return JSON.stringify(value)
 }
 
-export default stringify
+export const parse = (value: string): unknown => {
+  try {
+    return JSON.parse(value)
+  } catch {
+    return value
+  }
+}

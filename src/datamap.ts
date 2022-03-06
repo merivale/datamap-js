@@ -1,4 +1,4 @@
-import stringify from './stringify'
+import { parse, stringify } from './stringify'
 
 export class DataMap<KeyType, ValueType> {
   #keys: string[] = []
@@ -45,7 +45,7 @@ export class DataMap<KeyType, ValueType> {
   }
 
   keys (): KeyType[] {
-    return this.#keys.map(x => JSON.parse(x))
+    return this.#keys.map(x => parse(x) as KeyType)
   }
 
   values (): ValueType[] {
@@ -53,10 +53,10 @@ export class DataMap<KeyType, ValueType> {
   }
 
   entries (): [KeyType, ValueType][] {
-    return this.#keys.map((key, index) => [JSON.parse(key), this.#values[index]])
+    return this.#keys.map((key, index) => [parse(key) as KeyType, this.#values[index]])
   }
 
-  forEach (callback: (key: unknown, value: unknown, map: DataMap<KeyType, ValueType>) => void, thisArg: unknown) {
+  forEach (callback: (key: KeyType, value: ValueType, map: DataMap<KeyType, ValueType>) => void, thisArg: unknown) {
     callback.bind(thisArg !== undefined ? thisArg : this)
     for (const [key, value] of this.entries()) {
       callback(key, value, this)
