@@ -1,6 +1,6 @@
 # DataMap.js
 
-Here's a rough first idea for a JavaScript `DataMap` class, to replace the built-in `Map` class.
+Here's a rough first idea for JavaScript `DataMap` and `DataSet` classes, to replace the built-in `Map` and `Set` classes.
 Haven't tested it very thoroughly (still less written any tests), but having played around a bit it seems to work so far...
 
 ## The Problem
@@ -22,9 +22,21 @@ map.has([1, 2]) // false
 map.get([1, 2]) // undefined
 ```
 
+And it's a similar problem with `Set`:
+
+```js
+const set = new Set()
+
+set.add([1, 2])
+set.add([1, 2])
+
+set.size // 2
+set.has([1, 2]) // false
+```
+
 ## The Solution
 
-The `DataMap` class is supposed to work exactly like the built-in `Map` class, except it converts the keys to strings (in what should be a one-to-one mapping) - parsing them back again whenever you want them.
+The `DataMap` and `DataSet` classes are supposed to work exactly like the built-in `Map` and `Set` classes, but they convert the Map keys and Set values to strings (in what should be a one-to-one mapping) - parsing them back again whenever you want them.
 
 ```js
 const map = new DataMap()
@@ -35,4 +47,14 @@ map.set([1, 2], 'go to the loo')
 map.size // 1
 map.has([1, 2]) // true
 map.get([1, 2]) // 'go to the loo'
+```
+
+```js
+const set = new DataSet()
+
+set.add([1, 2])
+set.add([1, 2])
+
+set.size // 1
+set.has([1, 2]) // true
 ```
