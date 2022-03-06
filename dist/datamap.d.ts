@@ -9,6 +9,6 @@ export declare class DataMap<KeyType, ValueType> {
     keys(): KeyType[];
     values(): ValueType[];
     entries(): [KeyType, ValueType][];
-    forEach(callback: (key: unknown, value: unknown, map: DataMap<KeyType, ValueType>) => void, thisArg: unknown): void;
+    forEach(callback: (key: KeyType, value: ValueType, map: DataMap<KeyType, ValueType>) => void, thisArg: unknown): void;
     [Symbol.iterator](): Generator<[KeyType, ValueType], void, unknown>;
 }

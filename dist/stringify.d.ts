@@ -1,2 +1,2 @@
-declare const stringify: (value: unknown) => string;
-export default stringify;
+export declare const stringify: (value: unknown) => string;
+export declare const parse: (value: string) => unknown;

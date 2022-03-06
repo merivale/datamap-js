@@ -1,4 +1,4 @@
-import stringify from './stringify';
+import { parse, stringify } from './stringify';
 export class DataMap {
     #keys = [];
     #values = [];
@@ -38,13 +38,13 @@ export class DataMap {
         return this;
     }
     keys() {
-        return this.#keys.map(x => JSON.parse(x));
+        return this.#keys.map(x => parse(x));
     }
     values() {
         return this.#values;
     }
     entries() {
-        return this.#keys.map((key, index) => [JSON.parse(key), this.#values[index]]);
+        return this.#keys.map((key, index) => [parse(key), this.#values[index]]);
     }
     forEach(callback, thisArg) {
         callback.bind(thisArg !== undefined ? thisArg : this);
