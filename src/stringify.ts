@@ -6,7 +6,7 @@ const stringify = (value: unknown): string => {
 
   // other objects
   if (typeof value === 'function' || (typeof value === 'object' && value !== null)) {
-    return `{${Object.entries(value).sort().map((key, value) => `"${key}":${stringify(value)}`).join()}}`
+    return `{${Object.entries(value).sort().map(([key, value]) => `"${key}":${stringify(value)}`).join()}}`
   }
 
   // anything else (i.e. primitives)
