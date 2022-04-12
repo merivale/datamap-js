@@ -28,7 +28,7 @@ Wouldn't it be nice if regular equality checks _just worked_?
 The problem gets worse when you start working with sets and maps.
 
 Sets are supposed to contain unique items, but the built-in `Set` object lets you add the same value repeatedly, if that value is an array or other object.
-And no matter how many times you add it, JavaScript will keep telling you that isn't there:
+And no matter how many times you add it, JavaScript will keep telling you that it isn't there:
 
 ```js
 const set = new Set()
@@ -68,18 +68,18 @@ arr2 === arr2 // true - TADA!
 ```
 
 Calling the `fix` function on an array returns an immutable array, which is guaranteed to be the _same_ object in memory if you've `fix`ed that value already.
-If you want an immutable _map_, meanwhile, you can call the `fix` function on any object that _isn't_ an array:
+If you want an immutable map, meanwhile, you can call the `fix` function on any object that _isn't_ an array:
 
 ```js
-const map1 = fix({ one: 1, two: 2 })
-const map2 = fix({ one: 1, two: 2 })
+const map1 = fix({ one: 'two', buckle: 'my shoe' })
+const map2 = fix({ one: 'two', buckle: 'my shoe' })
 
-map1.get('one') // 1
-map2.get('two') // 2
+map1.get('one') // 'two'
+map2.get('buckle') // 'my shoe'
 map1 === map2 // true - YES!
 ```
 
-Most importantly, this will work with keys that are themselves arrays or other objects, in just the way you would expect:
+Better yet, this will work with keys that are themselves arrays or other objects, in just the way you would expect:
 
 ```js
 const map1 = fix({}).set([1, 2], 'buckle my shoe')
@@ -102,7 +102,7 @@ Fixed JS defines three classes, `FixedArray`, `FixedSet`, and `FixedMap`.
 These classes have all the same methods that the built-in `Array`, `Set`, and `Map` classes have, except that any of those methods that would mutate the instance natively instead return a modified copy of the object. For example:
 
 ```js
-// with regular arrays:
+// with native arrays:
 const arr1 = [1, 2, 3]
 arr1.push(4, 5, 6)
 arr1 // [1, 2, 3, 4, 5, 6]
@@ -118,10 +118,10 @@ const arr4 = arr3.pop()
 arr4 // FixedArray { #values: [1, 2, 3, 4, 5] }
 ```
 
-The `FixedArray` class also has a few extra useful methods, to make up for the fact athat you can no longer do direct index lookups:
+The `FixedArray` class also has a few extra useful methods, to make up for the fact that you can no longer do direct index lookups:
 
 ```js
-// with regular arrays:
+// with native arrays:
 const arr1 = ['buckle', 'my', 'shoe']
 arr1[0] // 'buckle'
 arr1[1] // 'my'
@@ -133,7 +133,7 @@ arr2.get(1) // 'my'
 arr2.last() // 'shoe'
 ```
 
-You can create instances of these objects by calling their class constructors if you want (`new FixedArray()`, `new FixedSet()`, `new FixedMap()`).
+You can create instances of these objects by calling their class constructors if you want: `new FixedArray()`, `new FixedSet()`, `new FixedMap()`.
 But the preferred way is to use the `fix` function when you can, and the more precise `fixSet`, and `fixMap` functions when you can't.
 
 | function | description |
@@ -149,17 +149,6 @@ Finally, there's an `unfix` function that converts any of the fixed things back 
 Needless to say, you'll get _copies_ of all the relevant things out of this function, which can be mutated without changing the fixed collections you pass in to it.
 
 For convenience, you can pass anything to the `unfix` function - if it isn't a `FixedArray`, `FixedSet`, or `FixedMap` it'll just be returned unchanged.
-
-## Fixed All the Way Down
-
-Note that anything you pass to Fixed's functions or methods will be `fix`ed all the way down.
-So if your array elements or object properties are themselves arrays or objects, these will also be `fix`ed (unless you already `fix`ed them yourself).
-
-This differs from Immutable JS, for example, which will allow you to create immutable collections containing regular mutable JavaScript objects if you like.
-So if that's something you need, this isn't the library for you.
-
-I can't see why you'd want that though.
-And to have the magic of ordinary equality checks just working, you need to opt-in to `fix`ed collections fully.
 
 ## Performance
 
