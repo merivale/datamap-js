@@ -2,6 +2,7 @@ type Primitive = string | number | bigint | boolean | symbol | undefined | null
 
 export function fix<K, V, T extends FixedArray<V> | FixedSet<V> | FixedMap<K, V>> (value: T): T
 export function fix<V> (value: V[]): FixedArray<V>
+export function fix<V> (value: Set<V>): FixedSet<V>
 export function fix<K extends string | number | symbol, V> (value: Record<K, V>): FixedMap<K, V>
 export function fix (value: object): FixedMap<string, unknown>
 export function fix<T extends Primitive> (value: T): T
@@ -11,12 +12,17 @@ export function fix (value: unknown): unknown {
     return value
   }
 
-  // convert Arrays to DataArrays
+  // convert Arrays to FixedArrays
   if (Array.isArray(value)) {
     return new FixedArray(value)
   }
 
-  // convert Objects to DataMaps
+  // convert Sets to FixedSets
+  if (value instanceof Set) {
+    return new FixedSet(value)
+  }
+
+  // convert Maps and other objects to FixedMaps
   if (typeof value === 'object' && value !== null) {
     return new FixedMap(value)
   }
@@ -29,7 +35,7 @@ export function fixSet<V> (values: V[]): FixedSet<V> {
   return new FixedSet(values)
 }
 
-export function fixMap<K, V> (values: object): FixedMap<K, V> {
+export function fixMap<K, V> (values: Array<[K, V]>): FixedMap<K, V> {
   return new FixedMap(values)
 }
 

@@ -137,12 +137,11 @@ But the preferred way is to use the `fix` function when you can, and the more pr
 
 | function | description |
 | -------- | ----------- |
-| `fix`    | Takes an array or any other object. If you give it an array, it returns a `FixedArray`; if you give it any other object, it returns a `FixedMap` with keys and values corresponding to that object's keys and values. |
-| `fixSet`  | Takes an array or a native `Set`, and returns a `FixedSet`. If you pass it an array with repeated values, it will filter them out. |
-| `fixMap` | Takes an object, an array of key-value pairs, or a native `Map`, and returns a `FixedMap`. If you give it a regular object, it works just like `fix`. |
+| `fix`    | Takes a native `Array`, `Set`, or `Map`, and returns the corresponding `FixedArray`, `FixedSet`, or `FixedMap`. You can also give it any old regular object, and it will return a `FixedMap` with keys and values corresponding to that object's keys and values. |
+| `fixSet`  | Takes an array and returns a `FixedSet`. If you pass it an array with repeated values, it will filter them out. Short for `fix(new Set())`. |
+| `fixMap` | Takes an array of key-value pairs, and returns a `FixedMap`. Short for `fix(new Map())`. |
 
 For convenience, you can pass values that don't need fixing to `fix` - i.e. primitives and instances of `FixedArray`, `FixedSet`, or `FixedMap` - and it will simply return those values unchanged.
-You can also pass `FixedSet`s and `FixedMap`s to `fixSet` and `fixMap`, with the same (i.e. no) effect.
 
 Finally, there's an `unfix` function that converts any of the fixed things back to their regular JavaScript equivalents.
 Needless to say, you'll get _copies_ of all the relevant things out of this function, which can be mutated without changing the fixed collections you pass in to it.
