@@ -17,7 +17,7 @@ The fundamental problem, I suggest, is more that you can't just trivially check 
 const arr1 = [1, 2, 3]
 const arr2 = [1, 2, 3]
 
-arr2 === arr2 // false :(
+arr1 === arr2 // false :(
 ```
 
 Now of course you can write a function to check whether two objects are equal.
