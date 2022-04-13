@@ -48,11 +48,10 @@ But what's the point of the built-in `Map` object if you have to keep references
 const map = new Map()
 
 map.set([1, 2], 'buckle my shoe')
-map.set([1, 2], 'go to the loo')
+map.set([3, 4], 'knock at the door')
 
-map.size // 2 - ¿QUE?
-map.has([1, 2]) // false - 'SCUSE ME??
-map.get([1, 2]) // undefined - SERIOUSLY??!
+map.has([1, 2]) // false - 'SCUSE ME?
+map.get([3, 4]) // undefined - SERIOUSLY?!
 ```
 
 ## The Solution
@@ -64,7 +63,7 @@ Instead, just return another reference to the object we cached earlier.
 const arr1 = fix([1, 2, 3])
 const arr2 = fix([1, 2, 3])
 
-arr2 === arr2 // true - TADA!
+arr1 === arr2 // true - TADA!
 ```
 
 Calling the `fix` function on an array returns an immutable array, which is guaranteed to be the _same_ object in memory if you've `fix`ed that value already.
