@@ -1,0 +1,31 @@
+{
+  "name": "fixed-js",
+  "version": "0.0.1",
+  "description": "Unique immutable collections for JavaScript",
+  "main": "./dist/fixed.min.js",
+  "types": "./dist/fixed.d.ts",
+  "author": "Amyas Merivale",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merivale/datamap-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/merivale/datamap-js/issues"
+  },
+  "homepage": "https://github.com/merivale/datamap-js#readme",
+  "keywords": [
+    "immutable",
+    "array",
+    "set",
+    "map",
+    "javascript"
+  ],
+  "scripts": {
+    "build": "tsc && esbuild src/fixed.ts --bundle --outfile=dist/fixed.js --format=esm --target=esnext && esbuild src/fixed.ts --bundle --minify --outfile=dist/fixed.min.js --format=esm --target=esnext"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.23",
+    "typescript": "^4.6.3"
+  }
+}

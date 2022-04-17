@@ -1,0 +1,11 @@
+import type { Primitive } from './types';
+import FixedArray from './fixed-array';
+import FixedMap from './fixed-map';
+import FixedSet from './fixed-set';
+declare function fix<K, V, T extends FixedArray<V> | FixedSet<V> | FixedMap<K, V>>(value: T): T;
+declare function fix<V>(value: V[]): FixedArray<V>;
+declare function fix<V>(value: Set<V>): FixedSet<V>;
+declare function fix<K extends string | number | symbol, V>(value: Record<K, V>): FixedMap<K, V>;
+declare function fix(value: object): FixedMap<string, unknown>;
+declare function fix<T extends Primitive>(value: T): T;
+export default fix;
