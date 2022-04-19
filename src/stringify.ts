@@ -3,10 +3,15 @@ import FixedMap from './fixed-map'
 import FixedSet from './fixed-set'
 
 const stringify = (value: unknown): string => {
-  // fixed things
-  if (value instanceof FixedArray || value instanceof FixedSet || value instanceof FixedMap) {
-    // TODO: sort the values of sets (because order doesn't matter to their identity)
+  // fixed arrays and maps
+  if (value instanceof FixedArray || value instanceof FixedMap) {
     return stringify(value.toArray())
+  }
+
+  // fixed sets
+  if (value instanceof FixedSet) {
+    // stringify elements first, then sort - because order doesn't matter for a sets identity
+    return `[${value.toArray().map(stringify).sort().join()}]`
   }
 
   // arrays
@@ -20,7 +25,7 @@ const stringify = (value: unknown): string => {
   }
 
   // primitives
-  return JSON.stringify(value)
+  return value === undefined ? 'undefined' : JSON.stringify(value)
 }
 
 export default stringify

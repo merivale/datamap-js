@@ -22,10 +22,12 @@
     "javascript"
   ],
   "scripts": {
-    "build": "tsc && esbuild src/fixed.ts --bundle --outfile=dist/fixed.js --format=esm --target=esnext && esbuild src/fixed.ts --bundle --minify --outfile=dist/fixed.min.js --format=esm --target=esnext"
+    "build": "tsc && esbuild src/fixed.ts --bundle --outfile=dist/fixed.js --format=cjs --target=esnext && esbuild src/fixed.ts --bundle --minify --outfile=dist/fixed.min.js --format=cjs --target=esnext",
+    "test": "yarn build && jest"
   },
   "devDependencies": {
     "esbuild": "^0.14.23",
+    "jest": "^27.5.1",
     "typescript": "^4.6.3"
   }
 }
