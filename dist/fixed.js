@@ -1,3 +1,35 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/fixed.ts
+var fixed_exports = {};
+__export(fixed_exports, {
+  FixedArray: () => FixedArray,
+  FixedMap: () => FixedMap,
+  FixedSet: () => FixedSet,
+  fix: () => fix_default,
+  fixMap: () => fix_map_default,
+  fixSet: () => fix_set_default,
+  stringify: () => stringify_default,
+  unfix: () => unfix_default
+});
+module.exports = __toCommonJS(fixed_exports);
+
 // src/fixed-map.ts
 var fixedMapCache = /* @__PURE__ */ new Map();
 var FixedMap = class {
@@ -70,8 +102,9 @@ var fixedSetCache = /* @__PURE__ */ new Map();
 var FixedSet = class {
   #values = /* @__PURE__ */ new Set();
   constructor(values = []) {
-    values = Array.isArray(values) ? values : Array.from(values.values());
-    this.#values = values.map(fix_default);
+    const set = Array.isArray(values) ? new Set(values) : values;
+    const fixedValues = Array.from(set.values()).map(fix_default);
+    this.#values = new Set(fixedValues);
     const hash = stringify_default(this);
     const existing = fixedSetCache.get(hash);
     if (existing) {
@@ -127,8 +160,11 @@ var FixedSet = class {
 
 // src/stringify.ts
 var stringify = (value) => {
-  if (value instanceof FixedArray || value instanceof FixedSet || value instanceof FixedMap) {
+  if (value instanceof FixedArray || value instanceof FixedMap) {
     return stringify(value.toArray());
+  }
+  if (value instanceof FixedSet) {
+    return `[${value.toArray().map(stringify).sort().join()}]`;
   }
   if (Array.isArray(value)) {
     return `[${value.map(stringify).join()}]`;
@@ -136,7 +172,7 @@ var stringify = (value) => {
   if (typeof value === "function" || typeof value === "object" && value !== null) {
     return `{${Object.entries(value).sort().map(([key, value2]) => `"${key}":${stringify(value2)}`).join()}}`;
   }
-  return JSON.stringify(value);
+  return value === void 0 ? "undefined" : JSON.stringify(value);
 };
 var stringify_default = stringify;
 
@@ -330,12 +366,3 @@ function unfix(value) {
   return value;
 }
 var unfix_default = unfix;
-export {
-  FixedArray,
-  FixedMap,
-  FixedSet,
-  fix_default as fix,
-  fix_map_default as fixMap,
-  fix_set_default as fixSet,
-  unfix_default as unfix
-};

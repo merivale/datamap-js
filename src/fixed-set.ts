@@ -8,8 +8,9 @@ export default class FixedSet<V> {
 
   constructor (values: V[] | Set<V> = []) {
     // turn `this` into a FixedSet with the given values
-    values = Array.isArray(values) ? values : Array.from(values.values())
-    this.#values = values.map(fix) as any // FIXME
+    const set = Array.isArray(values) ? new Set(values) : values
+    const fixedValues = Array.from(set.values()).map(fix)
+    this.#values = new Set(fixedValues) as any // FIXME
 
     // stringify `this`
     const hash = stringify(this)
