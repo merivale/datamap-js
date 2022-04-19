@@ -1,10 +1,7 @@
 # Fixed JS
 
-Fixed JS is a JavaScript library for creating immutable collections (arrays, sets, and maps) in JavaScript, somewhat like Immutable JS.
-But more than that, it aims to fix the fundamental problem with JavaScript's arrays and other objects.
-
-**Don't use it yet though.**
-I'm still just playing around, and haven't tested it properly.
+Fixed JS is a JavaScript library for creating immutable collections (arrays, sets, and maps) in JavaScript.
+But more than that, it aims to fix the fundamental problem with JavaScript's objects.
 
 ## The Problem
 
@@ -27,7 +24,7 @@ Wouldn't it be nice if regular equality checks _just worked_?
 
 The problem gets worse when you start working with sets and maps.
 
-Sets are supposed to contain unique items, but the built-in `Set` object lets you add the same value repeatedly, if that value is an array or other object.
+Sets are supposed to contain unique items, but the built-in `Set` object lets you add the same value repeatedly, if that value is an object.
 And no matter how many times you add it, JavaScript will keep telling you that it isn't there:
 
 ```js
@@ -41,7 +38,7 @@ set.size // 3 - EH?
 set.has([1, 2]) // false - WOT?
 ```
 
-Maps, meanwhile, are supposed to fix the limitation that regular objects can't themselves have arrays or other objects as property keys.
+Maps, meanwhile, are supposed to fix the limitation that regular objects can't themselves have objects as property keys.
 But what's the point of the built-in `Map` object if you have to keep references to these keys around in order to retrieve the value you associated with them?
 
 ```js
@@ -82,9 +79,6 @@ Better yet, this will work with keys that are themselves arrays or other objects
 
 ```js
 const map1 = fix({}).set([1, 2], 'buckle my shoe')
-const map2 = fix({}).set([1, 2], 'buckle my shoe')
-
-map1 === map2 // true - WOOHOO!
 
 map1.has([1, 2]) // true - OF COURSE!
 map2.get([1, 2]) // 'buckle my shoe' - FINALLY!!
@@ -98,7 +92,8 @@ You can if you like, but Fixed JS will just do it for you anyway if you don't.
 Fixed JS defines three classes, `FixedArray`, `FixedSet`, and `FixedMap`.
 (There's no separate immutable object/record type, because `FixedMap` already serves this purpose.)
 
-These classes have all the same methods that the built-in `Array`, `Set`, and `Map` classes have, except that any of those methods that would mutate the instance natively instead return a modified copy of the object. For example:
+These classes have all the same methods that the built-in `Array`, `Set`, and `Map` classes have (and just defer to the native methods for optimal performance wherever possible).
+Being immutable, however, any of those methods that would mutate the instance natively instead return a modified copy of the object. For example:
 
 ```js
 // with native arrays:
@@ -133,18 +128,18 @@ arr2.last() // 'shoe'
 ```
 
 You can create instances of these objects by calling their class constructors if you want: `new FixedArray()`, `new FixedSet()`, `new FixedMap()`.
-But the preferred way is to use the `fix` function when you can, and the more precise `fixSet`, and `fixMap` functions when you can't.
+But the preferred way is to use the `fix`, `fixSet`, and `fixMap` functions:
 
 | function | description |
 | -------- | ----------- |
 | `fix`    | Takes a native `Array`, `Set`, or `Map`, and returns the corresponding `FixedArray`, `FixedSet`, or `FixedMap`. You can also give it any old regular object, and it will return a `FixedMap` with keys and values corresponding to that object's keys and values. |
-| `fixSet`  | Takes an array and returns a `FixedSet`. If you pass it an array with repeated values, it will filter them out. Short for `fix(new Set())`. |
+| `fixSet` | Takes an array and returns a `FixedSet`. If you pass it an array with repeated values, it will filter them out. Short for `fix(new Set())`. |
 | `fixMap` | Takes an array of key-value pairs, and returns a `FixedMap`. Short for `fix(new Map())`. |
 
 For convenience, you can pass values that don't need fixing to `fix` - i.e. primitives and instances of `FixedArray`, `FixedSet`, or `FixedMap` - and it will simply return those values unchanged.
 
 Finally, there's an `unfix` function that converts any of the fixed things back to their regular JavaScript equivalents.
-Needless to say, you'll get _copies_ of all the relevant things out of this function, which can be mutated without changing the fixed collections you pass in to it.
+Needless to say, you'll get _copies_ of all the relevant things out of this function, which can be mutated without changing the fixed collections you passed in to it.
 
 For convenience, you can pass anything to the `unfix` function - if it isn't a `FixedArray`, `FixedSet`, or `FixedMap` it'll just be returned unchanged.
 
